@@ -14,17 +14,31 @@ import javax.sound.sampled.SourceDataLine;
 
 /**
  *
- * @author colin
+ * @author crcrowe0, emjetton0
  */
 public class ServerPlayback extends Thread{
+    /**
+     * Datasocket which takes in new audio data
+     */
     public DatagramSocket in;
+    /**
+     * DataLine for reading audio output
+     */
     public SourceDataLine audioOutput;
+    /**
+     * Default buffer for datagram packets
+     */
     byte[] buffer = new byte[512];
+
+    /**
+     * Implemented from the Thread class - core method which will receive data and write it to an audioOutput Dataline.
+     */
     @Override
     public void run(){
         DatagramPacket input = new DatagramPacket(buffer, buffer.length);
-        while(ServerVoice.calling){
-            int i = 0;
+        int i = 0;
+        while(ServerVoice.online){
+
             try {
                 in.receive(input);
                 buffer = input.getData();
